@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 import org.dieschnittstelle.ess.entities.erp.StockItem;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 public interface StockSystem {
 
