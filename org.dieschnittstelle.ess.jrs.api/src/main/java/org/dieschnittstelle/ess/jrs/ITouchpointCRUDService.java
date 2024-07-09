@@ -1,9 +1,10 @@
 package org.dieschnittstelle.ess.jrs;
 
-import org.dieschnittstelle.ess.entities.crm.StationaryTouchpoint;
+import org.dieschnittstelle.ess.entities.crm.AbstractTouchpoint;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
 import java.util.List;
 
 @Path("/touchpoints")
@@ -12,24 +13,22 @@ import java.util.List;
 public interface ITouchpointCRUDService {
 
 	@GET
-	List<StationaryTouchpoint> readAllTouchpoints();
+	List<AbstractTouchpoint> readAllTouchpoints();
 
 	@GET
 	@Path("/{touchpointId}")
-	StationaryTouchpoint readTouchpoint(@PathParam("touchpointId") long id);
+	AbstractTouchpoint readTouchpoint(@PathParam("touchpointId") long id);
 
 	@POST
-	StationaryTouchpoint createTouchpoint(StationaryTouchpoint touchpoint);
+	AbstractTouchpoint createTouchpoint(AbstractTouchpoint touchpoint);
 
 	@DELETE
 	@Path("/{touchpointId}")
 	boolean deleteTouchpoint(@PathParam("touchpointId") long id);
-		
-	/*
-	 * TODO JRS1: add a new annotated method for using the updateTouchpoint functionality of TouchpointCRUDExecutor and implement it
-	 */
+
 
 	@PUT
 	@Path("/{touchpointId}")
-	StationaryTouchpoint updateTouchpoint(@PathParam("touchpointId") long id, StationaryTouchpoint touchpoint);
+	AbstractTouchpoint updateTouchpoint(@PathParam("touchpointId") long id, AbstractTouchpoint touchpoint);
+
 }

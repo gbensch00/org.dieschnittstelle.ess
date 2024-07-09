@@ -9,17 +9,29 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Context;
 
 import org.apache.logging.log4j.Logger;
+import org.dieschnittstelle.ess.entities.crm.AbstractTouchpoint;
 import org.dieschnittstelle.ess.entities.crm.StationaryTouchpoint;
 import org.dieschnittstelle.ess.entities.GenericCRUDExecutor;
 
+import static org.dieschnittstelle.ess.utils.Utils.show;
+
 public class TouchpointCRUDServiceImpl implements ITouchpointCRUDService {
+
+//    Annotation?
+//    private ServletContext servletContext;
+//    private HttpServletRequest request;
+//    private GenericCRUDExecutor<AbstractTouchpoint> getCrudExecutor() {
+//        show("getCRUDExecutor(): servletContext: %s", servletContext);
+//        show("getCRUDExecutor(): request: %s", request);
+//        return (GenericCRUDExecutor<AbstractTouchpoint>) servletContext.getAttribute("touchpointCRUD");
+//    };
 
     protected static Logger logger = org.apache.logging.log4j.LogManager.getLogger(TouchpointCRUDServiceImpl.class);
 
     /**
      * this accessor will be provided by the ServletContext, to which it is written by the TouchpointServletContextListener
      */
-    private GenericCRUDExecutor<StationaryTouchpoint> touchpointCRUD;
+    private GenericCRUDExecutor<AbstractTouchpoint> touchpointCRUD;
 
     /**
      * here we will be passed the context parameters by the resteasy framework. Alternatively @Context
@@ -31,20 +43,23 @@ public class TouchpointCRUDServiceImpl implements ITouchpointCRUDService {
     public TouchpointCRUDServiceImpl(@Context ServletContext servletContext, @Context HttpServletRequest request) {
         logger.info("<constructor>: " + servletContext + "/" + request);
         // read out the dataAccessor
-        this.touchpointCRUD = (GenericCRUDExecutor<StationaryTouchpoint>) servletContext.getAttribute("touchpointCRUD");
+        this.touchpointCRUD = (GenericCRUDExecutor<AbstractTouchpoint>) servletContext.getAttribute("touchpointCRUD");
 
         logger.debug("read out the touchpointCRUD from the servlet context: " + this.touchpointCRUD);
     }
 
 
     @Override
-    public List<StationaryTouchpoint> readAllTouchpoints() {
+    public List<AbstractTouchpoint> readAllTouchpoints() {
+
         return (List) this.touchpointCRUD.readAllObjects();
+        //return (List)getCrudExecutor().readAllObjects();
     }
 
     @Override
-    public StationaryTouchpoint createTouchpoint(StationaryTouchpoint touchpoint) {
-        return (StationaryTouchpoint) this.touchpointCRUD.createObject(touchpoint);
+    public AbstractTouchpoint createTouchpoint(AbstractTouchpoint touchpoint) {
+        return (AbstractTouchpoint) this.touchpointCRUD.createObject(touchpoint);
+
     }
 
     @Override
@@ -53,8 +68,8 @@ public class TouchpointCRUDServiceImpl implements ITouchpointCRUDService {
     }
 
     @Override
-    public StationaryTouchpoint readTouchpoint(long id) {
-        StationaryTouchpoint tp = (StationaryTouchpoint) this.touchpointCRUD.readObject(id);
+    public AbstractTouchpoint readTouchpoint(long id) {
+        AbstractTouchpoint tp = (AbstractTouchpoint) this.touchpointCRUD.readObject(id);
 
         // this shows how JAX-RS WebApplicationException can be used to return HTTP error status codes
         // NOTE, HOWEVER, THAT FOR THE JRS EXERCISES null needs to be turned in case of non existence in order for the jUnit testcases
@@ -66,22 +81,14 @@ public class TouchpointCRUDServiceImpl implements ITouchpointCRUDService {
         }
     }
 
+    @Override
+    public AbstractTouchpoint updateTouchpoint(long id, AbstractTouchpoint touchpoint) {
+        touchpoint.setId(id);
+        return this.touchpointCRUD.updateObject(touchpoint);
+    }
+
     /*
      * UE JRS1: implement the method for updating touchpoints
      */
-
-    @Override
-    public StationaryTouchpoint updateTouchpoint(long id, StationaryTouchpoint touchpoint) {
-        // read tp with passed id from uri
-        StationaryTouchpoint tp = (StationaryTouchpoint) this.touchpointCRUD.readObject(id);
-        if (tp != null) {
-            // if tp exists update tp with passed touchpoint data and return new tp
-            tp = this.touchpointCRUD.updateObject(tp);
-            return tp;
-        } else {
-            // else throw error
-            throw new NotFoundException("The touchpoint with id " + id + " does not exist!");
-        }
-    }
 
 }

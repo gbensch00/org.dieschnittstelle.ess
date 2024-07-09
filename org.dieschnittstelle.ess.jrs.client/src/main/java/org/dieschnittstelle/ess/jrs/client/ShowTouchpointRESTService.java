@@ -1,11 +1,13 @@
 package org.dieschnittstelle.ess.jrs.client;
 
+import java.util.AbstractCollection;
 import java.util.List;
 
 //import com.fasterxml.jackson.databind.JavaType;
 //import com.fasterxml.jackson.databind.cfg.MapperConfig;
 //import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import org.apache.logging.log4j.Logger;
+import org.dieschnittstelle.ess.entities.crm.AbstractTouchpoint;
 import org.dieschnittstelle.ess.entities.crm.Address;
 import org.dieschnittstelle.ess.entities.crm.StationaryTouchpoint;
 import org.dieschnittstelle.ess.jrs.ITouchpointCRUDService;
@@ -46,14 +48,14 @@ public class ShowTouchpointRESTService {
 		show("serviceProxy: " + serviceProxy + " of class: " + serviceProxy.getClass());
 
 		// 1) read out all touchpoints
-		List<StationaryTouchpoint> touchpoints = serviceProxy.readAllTouchpoints();
+		List<AbstractTouchpoint> touchpoints = serviceProxy.readAllTouchpoints();
 		logger.info("read touchpoints: " + touchpoints);
 
 		// 2) delete the touchpoint after next console input
 		if (touchpoints != null && touchpoints.size() > 0) {
 			Utils.step();
 
-			StationaryTouchpoint tp = touchpoints.get(0);
+			AbstractTouchpoint tp = touchpoints.get(0);
 			serviceProxy.deleteTouchpoint(tp.getId());
 			logger.info("deleted touchpoint: " + tp);
 		}
